@@ -24,11 +24,11 @@ public class SimpleEntityManager implements EntityManager {
     @Override
     public <T> T persist(T entity) {
         EntityPersister entityPersister = entityPersisterContenxt.getEntityPersister(entity.getClass());
-        final T persistEntity = entityPersister.insert(entity);
-
+        EntityEntry entityEntry = new EntityEntry(entity);
+        final Object persistEntity = entityEntry.saving(entityPersister);
         this.persistenceContext.addEntity(EntityKey.of(entity), persistEntity);
 
-        return persistEntity;
+        return (T) persistEntity;
     }
 
     @Override
